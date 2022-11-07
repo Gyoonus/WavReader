@@ -20,7 +20,7 @@ public class MetaReader {
         WavHeader wavHeader;
         try {
             //WavHeaderReader wavHeaderReader = new WavHeaderReader(args[0]);
-            WavHeaderReader wavHeaderReader = new WavHeaderReader("/home/gyoo/test1234.wav");
+            WavHeaderReader wavHeaderReader = new WavHeaderReader("/home/gyoo/sox_44head.wav");
             wavHeader = wavHeaderReader.read();
             String subchunk = new String(wavHeader.getSubChunk2ID());
 
