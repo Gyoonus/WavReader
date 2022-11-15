@@ -8,36 +8,49 @@ import java.io.IOException;
  * Console utility for reading meta data of the wave files
  */
 public class MetaReader {
-    public static void main(String[] args) {
-        /*
-        if (args.length == 0) {
-            System.out.println("Illegal command line arguments.\n" +
-                    "Usage MetaReader\n\t MetaReader <source file path>");
-            return;
-        }
 
-        */
+    public int wav_checker (String wav_path, int channel_cnt, int sample_rate) {
         WavHeader wavHeader;
         try {
             //WavHeaderReader wavHeaderReader = new WavHeaderReader(args[0]);
-            WavHeaderReader wavHeaderReader = new WavHeaderReader("/home/gyoo/sox_44head.wav");
+            WavHeaderReader wavHeaderReader = new WavHeaderReader(wav_path);
             wavHeader = wavHeaderReader.read();
-            String subchunk = new String(wavHeader.getSubChunk2ID());
+
+            //Can Erase
             System.out.println(wavHeader.toString());
 
-            if(subchunk.equals("data") || subchunk.equals("DATA"))
-            {
-                System.out.println("supported File Format");
-            }
-            else
-            {
-                System.out.println("Unsupported File Format");
-            }
 
         } catch (FileNotFoundException e) {
-            System.out.println("Error: File " + args[0] + " not found!");
+            System.out.println("Error: File " + wav_path + " not found!");
+            return -1;
         } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
+            return -9999;
         }
+
+        if(wavHeader.getNumChannels() != channel_cnt){
+            System.out.println("API Request channel = " + channel_cnt + "wav file channel Count = " +wavHeader.getNumChannels() + "is Different!");
+            return -3;
+        }
+
+        if(wavHeader.getBitsPerSample() != 16) {
+            System.out.println("bits per sample = " + wavHeader.getBitsPerSample() + "  is not supported!");
+            return -4;
+        }
+
+        if(wavHeader.getSampleRate() != sample_rate) {
+            System.out.println("API Request Sample Rate = " + sample_rate + "wav file channel = " +wavHeader.getNumChannels() + "is Different");
+            return -5;
+        }
+
+        return 1;
+    }
+
+
+    public static void main(String[] args) {
+        MetaReader meta = new MetaReader();
+        int error = meta.wav_checker("/home/gyoo/test1234.wav", 1, 8000);
+        System.out.println(error);
+
+
     }
 }
