@@ -23,6 +23,7 @@ public class MetaReader {
             WavHeaderReader wavHeaderReader = new WavHeaderReader("/home/gyoo/sox_44head.wav");
             wavHeader = wavHeaderReader.read();
             String subchunk = new String(wavHeader.getSubChunk2ID());
+            System.out.println(wavHeader.toString());
 
             if(subchunk.equals("data") || subchunk.equals("DATA"))
             {
